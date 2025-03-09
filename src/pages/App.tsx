@@ -19,6 +19,45 @@ const VoiceIframe = () => {
     setRetryCount(prev => prev + 1);
   };
 
+  // Initialize the iframe with example content to prevent SSML empty errors
+  useEffect(() => {
+    const initializeIframe = () => {
+      if (iframeLoaded) {
+        try {
+          const iframe = document.querySelector('iframe');
+          if (iframe && iframe.contentWindow) {
+            // Add a small delay to ensure the iframe is fully loaded and initialized
+            setTimeout(() => {
+              // Post a message to iframe to set initial SSML content
+              iframe.contentWindow.postMessage({
+                action: 'setSSML',
+                content: '<speak>สวัสดีครับ ยินดีต้อนรับสู่เครื่องมือพากษ์เสียง AI</speak>'
+              }, '*');
+            }, 2000);
+          }
+        } catch (error) {
+          console.error('Error initializing iframe:', error);
+        }
+      }
+    };
+
+    initializeIframe();
+  }, [iframeLoaded]);
+
+  // Listen for messages from iframe
+  useEffect(() => {
+    const handleMessage = (event) => {
+      // Check if message is from our iframe
+      if (event.data && event.data.type === 'ssml-error') {
+        console.warn('SSML error received from iframe:', event.data);
+        toast.error('พบข้อผิดพลาดกับเนื้อหา SSML กรุณาตรวจสอบข้อความของคุณ');
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!iframeLoaded) {
