@@ -30,6 +30,12 @@ export const useAuth = () => {
   return context;
 };
 
+// Creating a simple user store for demo purposes
+// In a real app, this would be handled by Supabase
+interface StoredUser extends User {
+  password: string;
+}
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,27 +66,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      // Mock login - would be replaced with actual Supabase auth
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       // Simple validation
       if (!email || !password) {
         throw new Error('กรุณากรอกอีเมลและรหัสผ่าน');
       }
       
-      // Mock successful login
-      const mockUser = {
-        id: 'user-' + Date.now().toString(),
-        email,
-        name: email.split('@')[0],
+      // Get stored users from localStorage
+      const storedUsersJson = localStorage.getItem('ai-voice-users');
+      const storedUsers: StoredUser[] = storedUsersJson ? JSON.parse(storedUsersJson) : [];
+      
+      // Find user by email
+      const foundUser = storedUsers.find(u => u.email === email);
+      
+      // Check if user exists and password matches
+      if (!foundUser) {
+        throw new Error('ไม่พบบัญชีผู้ใช้นี้ กรุณาลงทะเบียน');
+      }
+      
+      if (foundUser.password !== password) {
+        throw new Error('รหัสผ่านไม่ถูกต้อง');
+      }
+      
+      // Successfully authenticated
+      const userWithoutPassword = {
+        id: foundUser.id,
+        email: foundUser.email,
+        name: foundUser.name
       };
       
-      setUser(mockUser);
-      localStorage.setItem('ai-voice-user', JSON.stringify(mockUser));
+      setUser(userWithoutPassword);
+      localStorage.setItem('ai-voice-user', JSON.stringify(userWithoutPassword));
       toast.success('เข้าสู่ระบบสำเร็จ');
       
-      console.log("User logged in successfully:", mockUser);
+      console.log("User logged in successfully:", userWithoutPassword);
     } catch (error) {
       console.error('Login error:', error);
       toast.error(error instanceof Error ? error.message : 'เข้าสู่ระบบไม่สำเร็จ');
@@ -93,26 +111,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (email: string, password: string, name: string) => {
     try {
       setIsLoading(true);
-      // Mock registration - would be replaced with actual Supabase auth
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       // Simple validation
       if (!email || !password || !name) {
         throw new Error('กรุณากรอกข้อมูลให้ครบถ้วน');
       }
       
-      // Mock successful registration
-      const mockUser = {
+      // Get stored users
+      const storedUsersJson = localStorage.getItem('ai-voice-users');
+      const storedUsers: StoredUser[] = storedUsersJson ? JSON.parse(storedUsersJson) : [];
+      
+      // Check if email already exists
+      if (storedUsers.some(u => u.email === email)) {
+        throw new Error('อีเมลนี้ถูกใช้งานแล้ว');
+      }
+      
+      // Create new user
+      const newUser: StoredUser = {
         id: 'user-' + Date.now().toString(),
         email,
         name,
+        password
       };
       
-      setUser(mockUser);
-      localStorage.setItem('ai-voice-user', JSON.stringify(mockUser));
+      // Add to stored users
+      storedUsers.push(newUser);
+      localStorage.setItem('ai-voice-users', JSON.stringify(storedUsers));
+      
+      // Log in the user (without password)
+      const userWithoutPassword = {
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name
+      };
+      
+      setUser(userWithoutPassword);
+      localStorage.setItem('ai-voice-user', JSON.stringify(userWithoutPassword));
       toast.success('ลงทะเบียนสำเร็จ');
       
-      console.log("User registered successfully:", mockUser);
+      console.log("User registered successfully:", userWithoutPassword);
     } catch (error) {
       console.error('Registration error:', error);
       toast.error(error instanceof Error ? error.message : 'ลงทะเบียนไม่สำเร็จ');
