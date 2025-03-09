@@ -11,23 +11,31 @@ const VoiceIframe = () => {
   // Watch for iframe load events to handle errors
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const [iframeError, setIframeError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const loadIframe = () => {
+    setIframeLoaded(false);
+    setIframeError(false);
+    setRetryCount(prev => prev + 1);
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!iframeLoaded) {
         setIframeError(true);
+        console.error("Iframe failed to load within timeout period");
       }
-    }, 10000); // 10 second timeout
+    }, 15000); // Increased timeout to 15 seconds
 
     return () => clearTimeout(timer);
-  }, [iframeLoaded]);
+  }, [iframeLoaded, retryCount]);
 
   return (
     <div className="w-full h-full min-h-[500px] relative rounded-lg overflow-hidden">
       {iframeError ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted p-4 rounded-lg">
           <p className="text-muted-foreground mb-4">ไม่สามารถโหลดเครื่องมือได้ กรุณาลองใหม่อีกครั้ง</p>
-          <Button onClick={() => window.location.reload()}>ลองใหม่</Button>
+          <Button onClick={loadIframe}>ลองใหม่</Button>
         </div>
       ) : !iframeLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-muted rounded-lg">
@@ -38,10 +46,12 @@ const VoiceIframe = () => {
         </div>
       )}
       <iframe 
+        key={`iframe-${retryCount}`}
         src="https://speechsynthesis.online/"
         className={`w-full h-full min-h-[500px] border-0 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
         title="AI Voice Generator"
-        allow="microphone"
+        allow="microphone; clipboard-write; clipboard-read; download"
+        sandbox="allow-same-origin allow-scripts allow-forms allow-downloads allow-popups"
         onLoad={() => {
           console.log("Iframe loaded successfully");
           setIframeLoaded(true);
