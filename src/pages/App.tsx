@@ -42,8 +42,14 @@ const VoiceIframe = () => {
         className={`w-full h-full min-h-[500px] border-0 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
         title="AI Voice Generator"
         allow="microphone"
-        onLoad={() => setIframeLoaded(true)}
-        onError={() => setIframeError(true)}
+        onLoad={() => {
+          console.log("Iframe loaded successfully");
+          setIframeLoaded(true);
+        }}
+        onError={() => {
+          console.error("Error loading iframe");
+          setIframeError(true);
+        }}
       />
     </div>
   );
@@ -51,10 +57,33 @@ const VoiceIframe = () => {
 
 const AppPage = () => {
   const { isAuthenticated, user, logout } = useAuth();
+  const [contentLoaded, setContentLoaded] = useState(false);
+
+  useEffect(() => {
+    // Ensure authentication state is stable before showing content
+    const timer = setTimeout(() => {
+      setContentLoaded(true);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // If not authenticated, redirect to auth page
-  if (!isAuthenticated) {
+  if (!isAuthenticated && contentLoaded) {
+    toast.error("กรุณาเข้าสู่ระบบเพื่อใช้งาน");
     return <Navigate to="/auth" replace />;
+  }
+
+  // Show loading while checking auth state
+  if (!contentLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin mb-4"></div>
+          <p className="text-muted-foreground">กำลังตรวจสอบสิทธิ์การใช้งาน...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

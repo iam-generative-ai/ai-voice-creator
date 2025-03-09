@@ -41,10 +41,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // In a real app, this would verify session with Supabase
         const savedUser = localStorage.getItem('ai-voice-user');
         if (savedUser) {
+          console.log("Found saved user session");
           setUser(JSON.parse(savedUser));
+        } else {
+          console.log("No saved user session found");
         }
       } catch (error) {
         console.error('Session error:', error);
+        localStorage.removeItem('ai-voice-user'); // Clear corrupted session if any
       } finally {
         setIsLoading(false);
       }
@@ -62,7 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       // Simple validation
       if (!email || !password) {
-        throw new Error('Please provide both email and password');
+        throw new Error('กรุณากรอกอีเมลและรหัสผ่าน');
       }
       
       // Mock successful login
@@ -74,10 +78,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       setUser(mockUser);
       localStorage.setItem('ai-voice-user', JSON.stringify(mockUser));
-      toast.success('Successfully logged in');
+      toast.success('เข้าสู่ระบบสำเร็จ');
+      
+      console.log("User logged in successfully:", mockUser);
     } catch (error) {
       console.error('Login error:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to login');
+      toast.error(error instanceof Error ? error.message : 'เข้าสู่ระบบไม่สำเร็จ');
       throw error;
     } finally {
       setIsLoading(false);
@@ -92,7 +98,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       // Simple validation
       if (!email || !password || !name) {
-        throw new Error('Please fill in all fields');
+        throw new Error('กรุณากรอกข้อมูลให้ครบถ้วน');
       }
       
       // Mock successful registration
@@ -104,10 +110,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       setUser(mockUser);
       localStorage.setItem('ai-voice-user', JSON.stringify(mockUser));
-      toast.success('Account created successfully');
+      toast.success('ลงทะเบียนสำเร็จ');
+      
+      console.log("User registered successfully:", mockUser);
     } catch (error) {
       console.error('Registration error:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to register');
+      toast.error(error instanceof Error ? error.message : 'ลงทะเบียนไม่สำเร็จ');
       throw error;
     } finally {
       setIsLoading(false);
@@ -122,10 +130,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       setUser(null);
       localStorage.removeItem('ai-voice-user');
-      toast.success('Successfully logged out');
+      toast.success('ออกจากระบบสำเร็จ');
+      
+      console.log("User logged out successfully");
     } catch (error) {
       console.error('Logout error:', error);
-      toast.error('Failed to logout');
+      toast.error('ออกจากระบบไม่สำเร็จ');
     } finally {
       setIsLoading(false);
     }

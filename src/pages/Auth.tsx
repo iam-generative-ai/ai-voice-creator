@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import LoginForm from '@/components/auth/LoginForm';
@@ -7,7 +7,24 @@ import RegisterForm from '@/components/auth/RegisterForm';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  useEffect(() => {
+    // Set document title
+    document.title = 'เข้าสู่ระบบ | AI Voice Creator';
+  }, []);
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin mb-4"></div>
+          <p className="text-muted-foreground">กำลังตรวจสอบข้อมูล...</p>
+        </div>
+      </div>
+    );
+  }
 
   // If user is already authenticated, redirect to app
   if (isAuthenticated) {
