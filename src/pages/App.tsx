@@ -31,7 +31,7 @@ const VoiceIframe = () => {
   }, [iframeLoaded, retryCount]);
 
   return (
-    <div className="w-full h-full min-h-[500px] relative rounded-lg overflow-hidden">
+    <div className="w-full h-full min-h-[720px] relative rounded-lg overflow-hidden">
       {iframeError ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted p-4 rounded-lg">
           <p className="text-muted-foreground mb-4">ไม่สามารถโหลดเครื่องมือได้ กรุณาลองใหม่อีกครั้ง</p>
@@ -48,7 +48,7 @@ const VoiceIframe = () => {
       <iframe 
         key={`iframe-${retryCount}`}
         src="https://speechsynthesis.online/"
-        className={`w-full h-full min-h-[500px] border-0 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`w-full h-[720px] border-0 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
         title="AI Voice Generator"
         allow="microphone; clipboard-write; clipboard-read; download"
         sandbox="allow-same-origin allow-scripts allow-forms allow-downloads allow-popups"
