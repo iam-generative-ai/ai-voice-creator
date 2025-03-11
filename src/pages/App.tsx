@@ -69,6 +69,25 @@ const AppPage = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const [contentLoaded, setContentLoaded] = useState(false);
 
+  // Prevent automatic page refresh
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      // Only prevent unintentional refresh
+      if (!e.currentTarget.activeElement?.getAttribute('data-allow-refresh')) {
+        e.preventDefault();
+        // Chrome requires returnValue to be set
+        e.returnValue = '';
+        return '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   useEffect(() => {
     // Ensure authentication state is stable before showing content
     const timer = setTimeout(() => {
@@ -96,6 +115,15 @@ const AppPage = () => {
     );
   }
 
+  // Handle refresh button click - will bypass refresh prevention
+  const handleRefresh = () => {
+    const refreshButton = document.createElement('button');
+    refreshButton.setAttribute('data-allow-refresh', 'true');
+    document.body.appendChild(refreshButton);
+    refreshButton.click();
+    window.location.reload();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
       <header className="glass-morphism sticky top-0 z-10 border-b border-primary/10">
@@ -104,6 +132,18 @@ const AppPage = () => {
             <span className="text-gradient">AI Voice Creator</span>
           </h1>
           <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefresh}
+              data-allow-refresh="true"
+              className="hidden md:flex"
+            >
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              รีเฟรช
+            </Button>
             <span className="text-sm text-muted-foreground hidden md:inline-block">
               สวัสดี, {user?.name || 'ผู้ใช้งาน'}
             </span>
