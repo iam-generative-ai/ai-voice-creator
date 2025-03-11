@@ -48,7 +48,7 @@ const VoiceIframe = () => {
       <iframe 
         key={`iframe-${retryCount}`}
         src="https://speechsynthesis.online/"
-        className={`w-full h-[720px] border-0 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`w-full h-full min-h-[720px] border-0 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
         title="AI Voice Generator"
         allow="microphone; clipboard-write; clipboard-read; download"
         sandbox="allow-same-origin allow-scripts allow-forms allow-downloads allow-popups"
