@@ -59,6 +59,13 @@ interface ActivityLog {
   timestamp: string;
 }
 
+// Default admin credentials
+const DEFAULT_ADMIN = {
+  email: 'pizchy.wachida@gmail.com',
+  password: 'Okey638601',
+  name: 'System Admin'
+};
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,6 +81,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setUser(JSON.parse(savedUser));
         } else {
           console.log("No saved user session found");
+        }
+        
+        // Check if there are any users in the system
+        // If not, create the default admin user
+        const storedUsersJson = localStorage.getItem('ai-voice-users');
+        const storedUsers: StoredUser[] = storedUsersJson ? JSON.parse(storedUsersJson) : [];
+        
+        if (storedUsers.length === 0) {
+          // Create default admin user
+          const newAdmin: StoredUser = {
+            id: 'user-admin-' + Date.now().toString(),
+            email: DEFAULT_ADMIN.email,
+            name: DEFAULT_ADMIN.name,
+            password: DEFAULT_ADMIN.password,
+            isBlocked: false,
+            isAdmin: true,
+            createdAt: new Date().toISOString()
+          };
+          
+          // Save to localStorage
+          localStorage.setItem('ai-voice-users', JSON.stringify([newAdmin]));
+          console.log("Created default admin user");
         }
       } catch (error) {
         console.error('Session error:', error);
