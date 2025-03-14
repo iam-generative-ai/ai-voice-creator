@@ -7,7 +7,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 
 const VoiceIframe = () => {
-  // Watch for iframe load events to handle errors
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const [iframeError, setIframeError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
@@ -24,7 +23,7 @@ const VoiceIframe = () => {
         setIframeError(true);
         console.error("Iframe failed to load within timeout period");
       }
-    }, 15000); // Increased timeout to 15 seconds
+    }, 15000);
 
     return () => clearTimeout(timer);
   }, [iframeLoaded, retryCount]);
@@ -68,13 +67,10 @@ const AppPage = () => {
   const { isAuthenticated, user, logout, isAdmin } = useAuth();
   const [contentLoaded, setContentLoaded] = useState(false);
 
-  // Prevent automatic page refresh
   useEffect(() => {
     const handleBeforeUnload = (e) => {
-      // Only prevent unintentional refresh
       if (!e.currentTarget.activeElement?.getAttribute('data-allow-refresh')) {
         e.preventDefault();
-        // Chrome requires returnValue to be set
         e.returnValue = '';
         return '';
       }
@@ -88,7 +84,6 @@ const AppPage = () => {
   }, []);
 
   useEffect(() => {
-    // Ensure authentication state is stable before showing content
     const timer = setTimeout(() => {
       setContentLoaded(true);
     }, 500);
@@ -96,13 +91,11 @@ const AppPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // If not authenticated, redirect to auth page
   if (!isAuthenticated && contentLoaded) {
     toast.error("กรุณาเข้าสู่ระบบเพื่อใช้งาน");
     return <Navigate to="/auth" replace />;
   }
 
-  // Show loading while checking auth state
   if (!contentLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -114,65 +107,8 @@ const AppPage = () => {
     );
   }
 
-  // Handle refresh button click - will bypass refresh prevention
-  const handleRefresh = () => {
-    const refreshButton = document.createElement('button');
-    refreshButton.setAttribute('data-allow-refresh', 'true');
-    document.body.appendChild(refreshButton);
-    refreshButton.click();
-    window.location.reload();
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
-      <header className="glass-morphism sticky top-0 z-10 border-b border-primary/10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-semibold">
-            <span className="text-gradient">AI Voice Creator</span>
-          </h1>
-          <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              data-allow-refresh="true"
-              className="hidden md:flex"
-            >
-              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              รีเฟรช
-            </Button>
-            {isAdmin && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                asChild
-                className="hidden md:flex"
-              >
-                <Link to="/admin">
-                  <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  ระบบผู้ดูแล
-                </Link>
-              </Button>
-            )}
-            <span className="text-sm text-muted-foreground hidden md:inline-block">
-              สวัสดี, {user?.name || 'ผู้ใช้งาน'}
-            </span>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => logout()}
-            >
-              ออกจากระบบ
-            </Button>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 pt-20 pb-20">
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8 text-center">

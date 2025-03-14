@@ -11,6 +11,8 @@ import AppPage from "./pages/App";
 import AdminPage from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import AIVoiceCreator from "./pages/AIVoiceCreator";
+import TabMenu from "./components/layout/TabMenu";
+import Header from "./components/layout/Header";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +23,7 @@ const App = () => (
         <Toaster />
         <Sonner position="top-center" />
         <BrowserRouter>
+          <Header />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
@@ -29,6 +32,7 @@ const App = () => (
             <Route path="/ai-voice-creator" element={<AIVoiceCreator />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <TabMenu />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>

@@ -15,13 +15,13 @@ const AIVoiceCreator = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-7xl">
+    <div className="container mx-auto px-4 py-12 pt-24 max-w-7xl">
       <AIVoiceCreatorHeader />
       <AIVoiceCreatorFeatures />
       <AIVoiceCreatorUsage />
       <AIVoiceCreatorPricing />
       
-      <div className="mt-16 text-center">
+      <div className="mt-16 text-center mb-20">
         <Card className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 rounded-2xl shadow-xl">
           <CardContent className="py-8">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">พร้อมให้โลกได้ยินเสียงของคุณหรือยัง?</h2>

@@ -1,105 +1,13 @@
 
 import { Button } from "@/components/ui/button";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Mic, Headphones, Clock, Globe } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <div className="min-h-screen">
-      {/* Header / Navigation */}
-      <header className={`fixed top-0 left-0 right-0 z-50 py-4 transition-all duration-300 ${scrolled ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm' : ''}`}>
-        <div className="container mx-auto px-4 flex items-center justify-between">
-          <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-gradient">AI Voice Creator</h1>
-          </div>
-
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <Link to="/">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    หน้าแรก
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to="/ai-voice-creator">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    รายละเอียดบริการ
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>บริการ</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    <li className="row-span-3">
-                      <NavigationMenuLink asChild>
-                        <Link to="/ai-voice-creator" className="flex flex-col h-full justify-between rounded-md bg-gradient-to-b from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-900/10 p-6 no-underline outline-none focus:shadow-md">
-                          <div className="mb-2 mt-4 text-lg font-medium text-primary">AI Voice Creator</div>
-                          <p className="text-sm leading-tight text-gray-700 dark:text-gray-300">
-                            เปลี่ยนข้อความให้เป็นเสียงพากย์คุณภาพสูงด้วย AI ล่าสุด
-                          </p>
-                          <div className="mt-4 mb-2 text-sm text-blue-600 dark:text-blue-400">
-                            ดูรายละเอียดเพิ่มเติม →
-                          </div>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <Link to="/ai-voice-creator" className="block select-none rounded-md p-3 no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <div className="text-sm font-medium leading-none">เสียงพากย์เพื่อธุรกิจ</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400">
-                          โซลูชันสำหรับองค์กรที่ต้องการยกระดับการสื่อสาร
-                        </p>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/ai-voice-creator" className="block select-none rounded-md p-3 no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <div className="text-sm font-medium leading-none">เสียงพากย์สำหรับคอนเทนต์</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400">
-                          สร้างเสียงคุณภาพสูงสำหรับวิดีโอและพอดแคสต์
-                        </p>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/ai-voice-creator" className="block select-none rounded-md p-3 no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <div className="text-sm font-medium leading-none">แพ็คเกจและราคา</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400">
-                          ดูรายละเอียดแพ็คเกจและโปรโมชันปัจจุบัน
-                        </p>
-                      </Link>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-
-          <div className="flex items-center gap-4">
-            <Button variant="outline" onClick={() => navigate('/auth')}>
-              เข้าสู่ระบบ
-            </Button>
-            <Button onClick={() => navigate('/auth')}>
-              ทดลองใช้ฟรี
-            </Button>
-          </div>
-        </div>
-      </header>
-
       {/* Hero Section */}
       <section className="pt-32 pb-20">
         <div className="container mx-auto px-4 text-center relative">
@@ -174,9 +82,9 @@ const Index = () => {
               © 2023 AI Voice Creator. สงวนลิขสิทธิ์.
             </p>
             <div className="flex gap-8 mt-4 md:mt-0">
-              <Link to="/ai-voice-creator" className="text-gray-600 dark:text-gray-400 hover:text-primary">บริการ</Link>
-              <Link to="/ai-voice-creator" className="text-gray-600 dark:text-gray-400 hover:text-primary">ราคา</Link>
-              <Link to="/auth" className="text-gray-600 dark:text-gray-400 hover:text-primary">เข้าสู่ระบบ</Link>
+              <Button variant="link" onClick={() => navigate('/ai-voice-creator')} className="text-gray-600 dark:text-gray-400 hover:text-primary">บริการ</Button>
+              <Button variant="link" onClick={() => navigate('/ai-voice-creator')} className="text-gray-600 dark:text-gray-400 hover:text-primary">ราคา</Button>
+              <Button variant="link" onClick={() => navigate('/auth')} className="text-gray-600 dark:text-gray-400 hover:text-primary">เข้าสู่ระบบ</Button>
             </div>
           </div>
         </div>

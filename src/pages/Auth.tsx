@@ -32,7 +32,7 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-b from-background to-secondary/50 p-4 md:p-8">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-b from-background to-secondary/50 p-4 md:p-8 pt-20">
       <div className="hero-glow" />
       
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">

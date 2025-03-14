@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -47,25 +46,7 @@ const AdminPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
-      <header className="glass-morphism sticky top-0 z-10 border-b border-primary/10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <h1 className="text-xl font-semibold">
-              <span className="text-gradient">ระบบผู้ดูแล</span>
-            </h1>
-            <Button variant="outline" size="sm" asChild>
-              <a href="/app">กลับไปหน้าหลัก</a>
-            </Button>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground hidden md:inline-block">
-              ผู้ดูแลระบบ: {user?.name || 'ผู้ดูแล'}
-            </span>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 pt-20 pb-20">
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
