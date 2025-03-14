@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import AppPage from "./pages/App";
 import AdminPage from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import AIVoiceCreator from "./pages/AIVoiceCreator";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/app" element={<AppPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/ai-voice-creator" element={<AIVoiceCreator />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
