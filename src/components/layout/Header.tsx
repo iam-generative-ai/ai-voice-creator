@@ -23,9 +23,8 @@ const Header = () => {
               <img 
                 src="/lovable-uploads/1ebffb6b-686a-4a62-b04d-c1b3c61a9245.png" 
                 alt="AI Voice Creator Logo" 
-                className="h-10 w-auto mr-2" 
+                className="h-10 w-auto" 
               />
-              <span className="text-2xl font-bold text-gradient">Voice Creator</span>
             </div>
           </Link>
         </div>
