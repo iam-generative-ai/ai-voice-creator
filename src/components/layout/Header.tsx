@@ -19,7 +19,14 @@ const Header = () => {
       <div className="container mx-auto px-4 flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/">
-            <h1 className="text-2xl font-bold text-gradient">AI Voice Creator</h1>
+            <div className="flex items-center">
+              <img 
+                src="/lovable-uploads/1ebffb6b-686a-4a62-b04d-c1b3c61a9245.png" 
+                alt="AI Voice Creator Logo" 
+                className="h-10 w-auto mr-2" 
+              />
+              <span className="text-2xl font-bold text-gradient">Voice Creator</span>
+            </div>
           </Link>
         </div>
 
