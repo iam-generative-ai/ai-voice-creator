@@ -8,6 +8,6 @@ export const DEFAULT_ADMIN = {
 
 export const DEFAULT_USERS = {
   email: 'user-premium@ai-voice.com',
-  password: 'Password-active',
+  password: 'Pass-active',
   name: 'User'
 };
